@@ -1,9 +1,8 @@
 from langchain.agents import initialize_agent, AgentType
 from langchain.memory import ConversationBufferMemory
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain.tools import Tool
 
-# Importa todas as ferramentas EDA
+# Importa todas as ferramentas do módulo EDA
 from eda_tools import (
     carregar_csv,
     estatisticas_descritivas,
@@ -17,7 +16,9 @@ from eda_tools import (
     detectar_outliers,
 )
 
-# Lista de ferramentas disponíveis
+# =====================================================
+# 🧰 Lista de ferramentas disponíveis
+# =====================================================
 tools = [
     carregar_csv,
     estatisticas_descritivas,
@@ -31,16 +32,25 @@ tools = [
     detectar_outliers,
 ]
 
-# Inicializa o modelo Gemini
+# =====================================================
+# 🧠 Configuração do modelo Gemini com LangChain
+# =====================================================
 llm = ChatGoogleGenerativeAI(
-    model="gemini-pro",
-    temperature=0.3
+    model="gemini-pro",      # ✅ Modelo suportado
+    temperature=0.3          # Controla criatividade da resposta
 )
 
-# Cria a memória para armazenar histórico de conversa
-memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+# =====================================================
+# 🧠 Memória de conversação (histórico)
+# =====================================================
+memory = ConversationBufferMemory(
+    memory_key="chat_history",
+    return_messages=True
+)
 
-# Inicializa o agente com as tools e a memória
+# =====================================================
+# 🤖 Criação do agente autônomo
+# =====================================================
 agente = initialize_agent(
     tools=tools,
     llm=llm,
@@ -49,9 +59,12 @@ agente = initialize_agent(
     verbose=True
 )
 
+# =====================================================
+# 🚀 Função de execução
+# =====================================================
 def executar_agente(prompt: str) -> str:
     """
-    Executa o agente com o prompt do usuário.
+    Executa o agente com o comando do usuário.
     """
     try:
         resposta = agente.run(prompt)
